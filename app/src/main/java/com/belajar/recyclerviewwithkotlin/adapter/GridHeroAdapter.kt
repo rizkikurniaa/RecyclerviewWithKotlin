@@ -10,6 +10,12 @@ import com.belajar.recyclerviewwithkotlin.model.Hero
 import com.bumptech.glide.Glide
 
 class GridHeroAdapter(private val listHeroes: ArrayList<Hero>) : RecyclerView.Adapter<GridHeroAdapter.GridViewHolder>() {
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     inner class GridViewHolder (itemview : View) : RecyclerView.ViewHolder(itemview) {
         var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
     }
@@ -27,5 +33,12 @@ class GridHeroAdapter(private val listHeroes: ArrayList<Hero>) : RecyclerView.Ad
         Glide.with(holder.itemView.context)
             .load(listHeroes[position].photo)
             .into(holder.imgPhoto)
+
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listHeroes[holder.adapterPosition]) }
+
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: Hero)
     }
 }
